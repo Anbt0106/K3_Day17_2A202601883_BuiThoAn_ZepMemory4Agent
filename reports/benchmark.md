@@ -3,24 +3,24 @@
 - Implementation: `student`
 - Kind: `practice`
 - Cases: **11**
-- Passed: **5/11**
-- Evidence hit rate: **45.5%**
-- Average retrieval latency: **321.4 ms**
-- Average token reduction vs full source context: **68.2%**
+- Passed: **11/11**
+- Evidence hit rate: **100.0%**
+- Average retrieval latency: **1127.3 ms**
+- Average token reduction vs full source context: **15.3%**
 
 | Case | Layer | Pass | Latency ms | Retrieved tokens | Token reduction | Missing / Error |
 | --- | --- | --- | ---: | ---: | ---: | --- |
 | E01 | short_term | PASS | 0.1 | 133 | 0.0% |  |
-| E06 | semantic | PASS | 282.6 | 126 | 72.5% |  |
-| E09 | long_term | PASS | 1090.1 | 804 | 0.0% |  |
+| E06 | semantic | PASS | 308.4 | 126 | 72.5% |  |
+| E09 | long_term | PASS | 2648.5 | 749 | 0.0% |  |
 | E10 | short_term | PASS | 0.2 | 195 | 0.0% |  |
-| E02 | long_term | FAIL | 370.2 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:44 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '289', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d0343cbc6ceb-HKG'}, status_code: 404, body: {'message': 'user not found', 'request_id': '51b61e28-20e5-4b7d-bd85-c32a4ae362e8'} |
-| E03 | long_term | FAIL | 403.3 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:45 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '287', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d036cc0e6ceb-HKG'}, status_code: 404, body: {'message': 'user not found', 'request_id': '28a72d39-fa15-42ac-8c93-5c5b50efa7fe'} |
-| E04 | episodic | FAIL | 189.6 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:45 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '287', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d037ff996ceb-HKG'}, status_code: 404, body: {'message': 'not found', 'request_id': '5c3a0dd6-78ba-4713-9ca2-7b3ca3115214'} |
-| E05 | episodic | FAIL | 235.3 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:45 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '286', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d0392b986ceb-HKG'}, status_code: 404, body: {'message': 'not found', 'request_id': 'ca90eb5d-01d4-49e1-972b-ad5f95302690'} |
-| E07 | mixed | FAIL | 365.3 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:45 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '284', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d03bdc6b6ceb-HKG'}, status_code: 404, body: {'message': 'user not found', 'request_id': '1e2a3a45-9e90-4465-a3c6-c5c2ded6d49a'} |
-| E11 | semantic | PASS | 237.6 | 125 | 77.9% |  |
-| E08 | long_term | FAIL | 361.3 | 0 | 100.0% | ApiError: headers: {'date': 'Mon, 17 Aug 2026 15:46:46 GMT', 'content-type': 'application/json; charset=utf-8', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-increment': '1', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '281', 'x-ratelimit-reset': '1786981620', 'strict-transport-security': 'max-age=2592000', 'cf-cache-status': 'DYNAMIC', 'content-encoding': 'gzip', 'server': 'cloudflare', 'cf-ray': 'a2c9d03faff66ceb-HKG'}, status_code: 404, body: {'message': 'user not found', 'request_id': '0bb43c6f-0d5e-4e14-a009-1b78b53d6f10'} |
+| E02 | long_term | PASS | 2313.7 | 2404 | 0.0% |  |
+| E03 | long_term | PASS | 2133.0 | 2276 | 0.0% |  |
+| E04 | episodic | PASS | 210.6 | 233 | 0.0% |  |
+| E05 | episodic | PASS | 208.4 | 252 | 0.0% |  |
+| E07 | mixed | PASS | 2246.0 | 462 | 18.2% |  |
+| E11 | semantic | PASS | 209.8 | 125 | 77.9% |  |
+| E08 | long_term | PASS | 2121.5 | 2204 | 0.0% |  |
 
 ## Evidence excerpts
 
@@ -34,7 +34,7 @@
 
 ### E09 - long_term
 
-`<USER_SUMMARY> The user's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python for backend. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du backend. </EP`
+`<USER_SUMMARY> The user's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python for backend examples. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du back`
 
 ### E10 - short_term
 
@@ -42,23 +42,23 @@
 
 ### E02 - long_term
 
-``
+`<USER_SUMMARY> Minh's personal project ORCHID-27 prefers Python. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, not Python.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses coroutines with Tasks. If this topic arises in the future, explain it using a timeline.  When explaining code, use short examples. If the topic of async/await and coroutines arises, explain it using a timeline. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 09:00:00     Source: message     Content: [us`
 
 ### E03 - long_term
 
-``
+`<USER_SUMMARY> Minh's personal project ORCHID-27 prefers Python. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, not Python.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses coroutines with Tasks. If this topic arises in the future, explain it using a timeline.  When explaining code, use short examples. If the topic of async/await and coroutines arises, explain it using a timeline. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 09:04:00     Source: message     Content: [us`
 
 ### E04 - episodic
 
-``
+`EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: TODO: hoan thanh benchmark report truoc thu Sau luc 16:00. Day la open loop LAB-REPORT-1600. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Cach hieu qua la reuse aiohttp ClientSession va dat concurrency=20. Reflection: loi chinh la connection churn, khong phai timeout threshold. Ma su co ASYNC-FIX-20. EPISODE: Da ghi nhan trajectory: increase timeout khong hieu qua; ClientSession + con`
 
 ### E05 - episodic
 
-``
+`EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: TODO: hoan thanh benchmark report truoc thu Sau luc 16:00. Day la open loop LAB-REPORT-1600. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Hay kiem tra connection pool, lifecycle cua client va concurrency. EPISODE: Cach hieu qua la reuse aiohttp ClientSession va dat concurrency=20. Reflection: loi chinh la connection churn, khong phai timeout threshold. Ma su co ASYNC-FIX-20. EPISODE: `
 
 ### E07 - mixed
 
-``
+`<LONG_TERM> <USER_SUMMARY> Minh's personal project ORCHID-27 prefers Python. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, not Python.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses coroutines with Tasks. If this topic arises in the future, explain it using a timeline.  When explaining code, use short examples. If the topic of async/await and coroutines arises, explain it using a timeline. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 09:00:00     Source: message     `
 
 ### E11 - semantic
 
@@ -66,4 +66,4 @@
 
 ### E08 - long_term
 
-``
+`<USER_SUMMARY> Minh's personal project ORCHID-27 prefers Python. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, not Python.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses coroutines with Tasks. If this topic arises in the future, explain it using a timeline.  When explaining code, use short examples. If the topic of async/await and coroutines arises, explain it using a timeline. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-05 08:00:00     Source: message     Content: [us`
