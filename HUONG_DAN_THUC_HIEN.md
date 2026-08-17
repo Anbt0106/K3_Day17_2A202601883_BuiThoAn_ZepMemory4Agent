@@ -13,6 +13,12 @@ Hoàn thiện agent có bốn lớp memory:
 
 Evaluator chấm **retrieved evidence**, không chấm câu trả lời đoán đúng. Case PASS khi mọi chuỗi trong `must_contain_all` xuất hiện và mọi chuỗi trong `must_not_contain` không xuất hiện. Mục tiêu practice: ít nhất **9/11 case PASS (80%)**. Điểm nền tối đa 80; golden 20/20 cộng 10; UI cộng 10.
 
+### Vì sao cần nhiều loại memory?
+
+Một cuộc hội thoại có hai vấn đề ngược nhau: giữ toàn bộ lịch sử thì context đầy và tốn token; xóa quá nhiều thì agent quên thông tin quan trọng. Vì vậy hệ thống chia memory theo thời gian và phạm vi: short-term cho lượt gần đây, long-term cho fact ổn định của user, episodic cho trải nghiệm và semantic cho tri thức dùng chung.
+
+Router chọn layer có khả năng chứa evidence; retrieval lấy phần liên quan; assembler ghép chúng theo ưu tiên và ngân sách token.
+
 ## 2. Quy tắc quan trọng
 
 - Chỉ viết code trong bốn marker `LAB TODO` của `src/memory_student.py`.
@@ -72,6 +78,10 @@ Luồng tổng quát:
 session JSON -> router -> retrieve 4 layers -> priority/token budget -> merged context -> evaluator
 ```
 
+### Cách hiểu scope và provenance
+
+`user_id` là ranh giới riêng tư: memory của Minh không được xuất hiện khi Lan hỏi. `graph_id` là ranh giới của knowledge graph dùng chung. `source`, timestamp và confidence cho biết evidence đến từ đâu và fact nào mới hơn. Kết quả nghe hợp lý nhưng sai user hoặc không có provenance vẫn là lỗi memory.
+
 ## 5. Pha A: short-term và compaction
 
 Chạy:
@@ -90,6 +100,10 @@ docker compose run --rm app python -m src.demo_short_term
 
 Compaction phải giữ state, decision, TODO và constraint; không chỉ tóm tắt văn bản. Không sửa `src/evaluate.py`; E01/E10 dùng short-term local.
 
+### Lý thuyết: buffer, summary và sliding window
+
+Buffer giữ mọi message nên dễ truy vết nhưng token tăng tuyến tính. Summary nén lượt cũ nhưng có thể làm mất chi tiết. Sliding window giữ summary/state và một số lượt gần nhất, là cân bằng của lab. E10 kiểm tra việc trích xuất thông tin quan trọng: filler bị loại nhưng `REVIEW-DEADLINE-1600` vẫn phải còn.
+
 ## 6. Pha B: long-term cross-session
 
 Hoàn thiện `retrieve_long_term` trong `src/memory_student.py`. Luồng cốt lõi:
@@ -107,6 +121,10 @@ docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded
 ```
 
 Kiểm tra E02 (Python), E03 (benchmark report và 16:00), E08 (recency: BLUEBIRD-42 phải là TypeScript + NestJS), E09 (Lan không thấy ORCHID-27).
+
+### Lý thuyết: long-term và recency
+
+Long-term không phải bản sao toàn bộ transcript. Zep tạo Context Block từ user graph dựa trên query, nên thread mới vẫn có thể nhận preference hoặc open loop phù hợp. Khi fact mới mâu thuẫn fact cũ, ưu tiên fact mới trong đúng phạm vi project nhưng vẫn giữ provenance của fact cũ. Đó là lý do E08 kiểm tra riêng `BLUEBIRD-42`.
 
 ## 7. Pha C: episodic memory
 
@@ -130,6 +148,10 @@ docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded
 
 E04 cần `ClientSession`, `concurrency=20`, `ASYNC-FIX-20`. E05 cần `connection churn`, `timeout threshold`. Không dùng semantic `graph_id` cho episodic.
 
+### Lý thuyết: episodic khác long-term
+
+Long-term trả lời “user/project hiện có fact gì?”. Episodic trả lời “lần trước đã thử gì và kết quả ra sao?”. `Python` là preference long-term; còn việc tăng timeout thất bại rồi reuse `ClientSession` với `concurrency=20` là episode. `episode_char_cap` giúp giữ nhiều episode khác nhau thay vì để một transcript dài chiếm hết budget.
+
 ## 8. Pha D: semantic memory
 
 Hoàn thiện `retrieve_semantic` bằng standalone graph:
@@ -151,6 +173,10 @@ docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded
 
 Semantic dùng `graph_id`, không dùng `user_id`. Kiểm tra E06 và E11.
 
+### Lý thuyết: semantic memory và marker
+
+Semantic memory giống knowledge base dùng chung, không nên chứa preference riêng của Lan hay Minh. Marker như `PAYMENT-RULE-3` là evidence dễ kiểm tra. `scope="auto"` có thể trả fact đã trích xuất nhưng làm mất marker literal, nên lab ưu tiên `scope="episodes"` và fallback `nodes`.
+
 ## 9. Pha E: assemble và benchmark
 
 Hoàn thiện `assemble_context`:
@@ -169,6 +195,10 @@ docker compose run --rm app python -m src.compare_reports
 ```
 
 Kiểm tra `reports/benchmark.json/.md`, `reports/benchmark_no_memory.json/.md` và `reports/comparison.md`. Nếu fail, đọc cột `Missing / Error` và evidence excerpt, rồi sửa đúng layer.
+
+### Lý thuyết: router, budget và cách đọc điểm
+
+Retriever tốt chưa đủ; context còn phải được ghép đúng. Budget 10/4/3/3 ngăn một layer dài lấn át layer khác. Khi đọc report, ưu tiên **passed/hit rate**, evidence thiếu và forbidden leakage; latency và token reduction chỉ có ý nghĩa sau khi evidence đúng. No-memory có thể giảm rất nhiều token chỉ vì trả rỗng, đó không phải hiệu quả thật.
 
 ## 10. Mini-drill
 
@@ -191,6 +221,10 @@ docker compose run --rm app python -m src.forget --user-id minh-lab17 --verify-o
 
 Verify phải chứng minh memory user-scoped của Minh không còn được retrieve. Chụp hai lệnh thành `privacy.png`. Nếu còn chạy golden, seed lại một lần:
 
+### Lý thuyết: consent và right-to-be-forgotten
+
+Memory có vòng đời và phạm vi. `consent.json` thể hiện user đã opt-in; schema còn có TTL và validity. Khi user yêu cầu quên, phải xóa và verify ở mọi user-scoped store. “Đã gọi lệnh delete” chưa đủ nếu vẫn recall được dữ liệu.
+
 ```powershell
 docker compose run --rm app python -m src.seed
 ```
@@ -204,6 +238,8 @@ docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded
 ```
 
 Golden +10 chỉ khi `passed == 20` và `summary.perfect == true`. UI phải load case, chat tiếp, gọi retrieval thật và hiển thị evidence/layer; UI stub không đủ.
+
+Golden là tập kiểm tra ẩn để tránh tối ưu riêng cho E01–E11. Vì vậy không sửa golden, không copy reference implementation và không coi practice PASS là bảo đảm golden PASS.
 
 ## 13. README_submission.md
 
@@ -247,4 +283,3 @@ git diff --cached --name-status
 | Golden chưa chạy | Chờ giảng viên phát file đúng thời điểm. |
 | Golden fail sau forget | Seed lại một lần trước golden. |
 | Token reduction cao nhưng hit rate thấp | Ưu tiên evidence hit rate, không tối ưu token mù quáng. |
-

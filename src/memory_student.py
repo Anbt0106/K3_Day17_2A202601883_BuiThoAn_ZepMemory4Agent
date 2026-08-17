@@ -54,7 +54,7 @@ class StudentMemory:
             user_id=user_id,
             query=cap_query(query),
             scope="episodes",
-            limit=15,
+            limit=10,
         )
         return render_graph_search(results, episode_char_cap=180)
 
@@ -71,7 +71,7 @@ class StudentMemory:
                 graph_id=graph_id,
                 query=q,
                 scope="episodes",
-                limit=8,
+                limit=4,
             )
         except Exception:
             # Compatibility fallback for accounts/SDKs where episodes scope differs.
@@ -79,9 +79,9 @@ class StudentMemory:
                 graph_id=graph_id,
                 query=q,
                 scope="nodes",
-                limit=8,
+                limit=4,
             )
-        return render_graph_search(results)
+        return render_graph_search(results, episode_char_cap=280)
 
     def assemble_context(self, layers: dict[str, str]) -> tuple[str, dict[str, dict[str, int]]]:
         # LAB TODO 4/4
